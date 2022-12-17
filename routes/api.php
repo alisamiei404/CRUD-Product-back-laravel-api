@@ -16,9 +16,9 @@ use App\Http\Controllers\ProductController;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::get('/product/all', [ProductController::class, 'allProduct']);
 Route::get('/product/single/{id}', [ProductController::class, 'singleProduct']);

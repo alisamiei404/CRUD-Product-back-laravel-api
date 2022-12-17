@@ -15,7 +15,7 @@ class ProductController extends Controller
 {
     public function allProduct()
     {
-        $products = Product::get();
+        $products = Product::orderByDesc('id')->get();
 
         return response()->json([
             'products' => $products
@@ -33,35 +33,35 @@ class ProductController extends Controller
 
     public function createProduct(CreateProductRequest $request)
     {
-        $name = '';
-        if($request->has('image')){
-          $image = $request->file('image');
+      $name = '';
+      if($request->has('image')){
+        $image = $request->file('image');
 
-          $name = time().'.'.$image->getClientOriginalExtension();
-          $image->move('images/',$name);
-        }
-        $product = Product::create([
-            'title' => $request->title,
-            'slug' => $request->slug,
-            'image' => $name,
-            'price' => $request->price,
-            'count' => $request->count,
-            'status' => $request->status ? 1 : 0,
-        ]);
+        $name = time().'.'.$image->getClientOriginalExtension();
+        $image->move('images/',$name);
+      }
+      $product = Product::create([
+          'title' => $request->title,
+          'slug' => $request->slug,
+          'image' => $name,
+          'price' => $request->price,
+          'count' => $request->count,
+          'status' => $request->status === "true" ? 1 : 0
+      ]);
 
-        return true;
+      return true;
     }
 
     public function updateProduct(UpdateProductRequest $request, $id)
     {
-        $product = Product::findOrFail($id);
-        $product->title = $request->title;
-        $product->slug = $request->slug;
-        $product->price = $request->price;
-        $product->count = $request->count;
-        $product->status =$request->status ? 1 : 0;
-        $product->save();
-        return $product;
+      $product = Product::findOrFail($id);
+      $product->title = $request->title;
+      $product->slug = $request->slug;
+      $product->price = $request->price;
+      $product->count = $request->count;
+      $product->status =$request->status ? 1 : 0;
+      $product->save();
+      return $product;
     }
 
     public function updateProductImage(UpdateProductImageRequest $request, $id)
